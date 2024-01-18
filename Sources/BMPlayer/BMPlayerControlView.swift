@@ -54,7 +54,6 @@ open class BMPlayerControlView: UIView {
     open var resource: BMPlayerResource?
     
     open var selectedIndex = 0
-    open var isFullscreen  = false
     open var isMaskShowing = true
     
     open var totalDuration: TimeInterval = 0
@@ -98,7 +97,7 @@ open class BMPlayerControlView: UIView {
     /* fullScreen button
      fullScreenButton.isSelected = player.isFullscreen
      */
-    open var fullscreenButton = UIButton(type: UIButton.ButtonType.custom)
+//    open var fullscreenButton = UIButton(type: UIButton.ButtonType.custom)
     
     open var subtitleLabel    = UILabel()
     open var subtitleBackView = UIView()
@@ -250,9 +249,7 @@ open class BMPlayerControlView: UIView {
           wSelf.bottomMaskView.alpha = alpha
           wSelf.mainMaskView.backgroundColor = UIColor(white: 0, alpha: isShow ? 0.4 : 0.0)
 
-          if isShow {
-              if wSelf.isFullscreen { wSelf.chooseDefinitionView.alpha = 1.0 }
-          } else {
+          if !isShow {
               wSelf.replayButton.isHidden = true
               wSelf.chooseDefinitionView.snp.updateConstraints { (make) in
                   make.height.equalTo(35)
@@ -273,8 +270,8 @@ open class BMPlayerControlView: UIView {
      - parameter isForFullScreen: is for full screen
      */
     open func updateUI(_ isForFullScreen: Bool) {
-        isFullscreen = isForFullScreen
-        fullscreenButton.isSelected = isForFullScreen
+//        isFullscreen = isForFullScreen
+//        fullscreenButton.isSelected = isForFullScreen
         chooseDefinitionView.isHidden = !BMPlayerConf.enableChooseDefinition || !isForFullScreen
         if isForFullScreen {
             if BMPlayerConf.topBarShowInCase.rawValue == 2 {
@@ -543,7 +540,6 @@ open class BMPlayerControlView: UIView {
         bottomWrapperView.addSubview(totalTimeLabel)
         bottomWrapperView.addSubview(progressView)
         bottomWrapperView.addSubview(timeSlider)
-        bottomWrapperView.addSubview(fullscreenButton)
         
         playButton.tag = BMPlayerControlView.ButtonType.play.rawValue
         playButton.setImage(BMImageResourcePath("Pod_Asset_BMPlayer_play"),  for: .normal)
@@ -581,10 +577,10 @@ open class BMPlayerControlView: UIView {
         progressView.tintColor      = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 0.6 )
         progressView.trackTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 0.3 )
         
-        fullscreenButton.tag = BMPlayerControlView.ButtonType.fullscreen.rawValue
-        fullscreenButton.setImage(BMImageResourcePath("Pod_Asset_BMPlayer_fullscreen"),    for: .normal)
-        fullscreenButton.setImage(BMImageResourcePath("Pod_Asset_BMPlayer_portialscreen"), for: .selected)
-        fullscreenButton.addTarget(self, action: #selector(onButtonPressed(_:)), for: .touchUpInside)
+//        fullscreenButton.tag = BMPlayerControlView.ButtonType.fullscreen.rawValue
+//        fullscreenButton.setImage(BMImageResourcePath("Pod_Asset_BMPlayer_fullscreen"),    for: .normal)
+//        fullscreenButton.setImage(BMImageResourcePath("Pod_Asset_BMPlayer_portialscreen"), for: .selected)
+//        fullscreenButton.addTarget(self, action: #selector(onButtonPressed(_:)), for: .touchUpInside)
         
         mainMaskView.addSubview(loadingIndicator)
         
@@ -708,14 +704,6 @@ open class BMPlayerControlView: UIView {
             make.centerY.equalTo(self.currentTimeLabel)
             make.left.equalTo(self.timeSlider.snp.right).offset(5)
             make.width.equalTo(40)
-        }
-    
-        fullscreenButton.snp.makeConstraints { [unowned self](make) in
-            make.width.equalTo(50)
-            make.height.equalTo(50)
-            make.centerY.equalTo(self.currentTimeLabel)
-            make.left.equalTo(self.totalTimeLabel.snp.right)
-            make.right.equalToSuperview()
         }
         
         loadingIndicator.snp.makeConstraints { [unowned self](make) in
